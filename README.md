@@ -16,6 +16,11 @@ The project uses a Makefile to simulate a very simple build pipeline with two st
   * Deploy app (just pretend for the purposes of this example!)
   * Record the deployment in the Pact Broker
 
+## For the repositiories 
+
+Fork the example-consumer and example-provider projects in to your own Github account (click the 'Fork' button in the top right).
+example-consumer : [https://github.com/pactflow/example-consumer](https://github.com/npawlak/pactflow-example-consumer)
+example-provider : [https://github.com/pactflow/example-provider](https://github.com/npawlak/pactflow-example-provider)
 
 ## Step by step
 
