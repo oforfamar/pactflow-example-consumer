@@ -26,7 +26,7 @@ Fork the example-consumer and example-provider projects in to your own Github ac
 
 In Github:
 
-1. Open your forked example-consumer project (https://github.com/<your-username>/example-consumer)
+1. Open your forked example-consumer project https://github.com/your-username/example-consumer
 2. Click on the **Actions** tab.
 3. Click the button with the text **"I understand my workflows, go ahead and enable them"**
 4. Under the **Workflows** menu on the left, select **Build**.
@@ -44,7 +44,7 @@ The source repositories are configured to use the the public broker at test.pact
      * Log in to your PactFlow account (**https://<your-subdomain>.pactflow.io**), and go to Settings > API Tokens.
      * Click the Copy button for the read/write CI token (make sure it's the read write one, not the read only one).
 * In Github:
-     * Open your forked **example-consumer** project (**https://github.com/<your-username>/example-consumer**)
+     * Open your forked **example-consumer** project **https://github.com/your-username/example-consumer**
      * Click on the **Settings** tab.
      * Open the **Secrets and variables** dropdown in the side menu.
      * Select Actions from the dropdown
@@ -56,7 +56,7 @@ The source repositories are configured to use the the public broker at test.pact
      * Go to Settings > API Tokens.
      * Click the **COPY PACTFLOW BASE URL** button
 * In Github:
-     * Open your forked **example-consumer** project (**https://github.com/<your-username>/example-consumer**)
+     * Open your forked **example-consumer** project **https://github.com/your-username/example-consumer**
      * Open **.github/workflows/build.yml**
      * In the upper right corner of the file view, click 🖊️ to open the file editor.
      * Update the value of **PACT_BROKER_BASE_URL** to the base URL of your own PactFlow account. You can easily get this by clicking the COPY PACTFLOW BASE URL button on the API Tokens page in PactFlow.
@@ -77,7 +77,7 @@ The source repositories are configured to use the the public broker at test.pact
      * Log in to your PactFlow account (**https://<your-subdomain>.pactflow.io**), and go to Settings > API Tokens.
      * Click the Copy button for the read/write CI token (make sure it's the read write one, not the read only one).
 * In Github:
-     * Open your forked **example-provider** project (**https://github.com/<your-username>/example-provider**)
+     * Open your forked **example-provider** project **https://github.com/your-username/example-provider**
      * Click on the **Settings** tab.
      * Open the **Secrets and variables** dropdown in the side menu.
      * Select Actions from the dropdown
@@ -89,7 +89,7 @@ The source repositories are configured to use the the public broker at test.pact
      * Go to Settings > API Tokens.
      * Click the **COPY PACTFLOW BASE URL** button
 * In Github:
-     * Open your forked **example-provider** project (**https://github.com/<your-username>/example-provider**)
+     * Open your forked **example-provider** project **https://github.com/your-username/example-provider**
      * Open **.github/workflows/build.yml**
      * In the upper right corner of the file view, click 🖊️ to open the file editor.
      * Update the value of **PACT_BROKER_BASE_URL** to the base URL of your own PactFlow account. You can easily get this by clicking the COPY PACTFLOW BASE URL button on the API Tokens page in PactFlow.
