@@ -116,3 +116,90 @@ To make both your builds go green, we are going to retry can-i-deploy, now that 
 6. The **deploy** step should pass too - our consumer is deployed to production, and we record this with the **record-deployment command**, marking this application version of our consumer as deployed to **production**
 
 *Both consumer and provider builds passing*
+
+
+## Configure webhook
+When using Pact in a CI/CD pipeline, there are two reasons for a pact verification task to take place:
+
+* When the provider changes (to make sure it does not break any existing consumer expectations)
+* When a pact changes (to see if the provider is compatible with the new expectations)
+
+To ensure that the verification step is run whenever a pact changes, we need to configure a PactFlow webhook to trigger a provider verification build in Github Actions.
+
+You can see the configuration for this build in .github/workflows/contract_requiring_verification_published.yml in the provider project.<br>
+
+Rather than verifying the pacts with the configured consumer version selectors, it triggers once for each of the following provider versions that are missing a verification result for the newly published pact:
+* the latest version from the provider's main branch
+* any version currently deployed to an environment
+
+This is achieved by passing the URL of the changed pact to the build via a parameter in the body of the webhook request, as well as the provider version number and the provider branch of the head, test and production versions.
+
+See here for in-depth details about the "contract requiring verification published" event.
+
+The PactFlow webhook will need a Github access token to be able to trigger the build in Github. We don't want the Github token to be stored in clear text in the webhook, so we will create a secret in PactFlow to contain token.<br>
+
+1. Create a Github token.
+* In Github:
+     * Open the **Personal access tokens page**
+     * Click on your profile picture in the top right of the window.
+     * Select **Settings** -> Select **Developer settings** from the bottom of the menu on the left -> Select **Personal access tokens** from the menu on the left.
+     * Click **Generate new token**
+     * Set **Note** to **Token for triggering example-provider pact verification build**
+     * Select **public_repo** scope.
+     * Select an **Expiration** period for your token
+     * Click **Generate token**
+     * Copy the value of the token and put it in an open file (or better yet, store it in your password manager!)
+     * Create a PactFlow secret for the Github token.
+
+* In your PactFlow account:
+     * Go to the Secrets page
+     * Click on the Settings icon in the top left (it looks like a cog wheel) -> Select the **Secrets** tab from the menu on the left.
+     * Click "ADD SECRET"
+     * Select "None" in the team drop down box.
+     * Enter the name **githubToken** and paste the value that you copied in the previous step.
+     * Click "CREATE"
+
+* Create the "contract requiring verification published" webhook.
+     * In your PactFlow account:
+     * Select the **Webhooks** tab from the settings page.
+     * Click "ADD WEBHOOK".
+     * Set:
+     * Team: None
+     * Description: **Contract requiring verification published webhook for pactflow-example-provider**
+     * Consumer: leave as "ALL"
+     * Provider: select **pactflow-example-provider**
+     * Events: select **Contract published that requires verification**
+     * URL:<code>https://api.github.com/repos/<YOUR GITHUB ACCOUNT HERE>/example-provider/dispatches</code>
+     * Headers:
+     * <code>Content-Type: application/json
+Accept: application/vnd.github.everest-preview+json
+Authorization: Bearer ${user.githubToken}</code>
+
+     * Body:
+       <code>{
+       "event_type": "contract_requiring_verification_published",
+       "client_payload": {
+        "pact_url": "${pactbroker.pactUrl}",
+        "sha": "${pactbroker.providerVersionNumber}",
+        "branch": "${pactbroker.providerVersionBranch}",
+        "message": "Verify changed pact for ${pactbroker.consumerName} version ${pactbroker.consumerVersionNumber} branch ${pactbroker.consumerVersionBranch} by ${pactbroker.providerVersionNumber} (${pactbroker.providerVersionDescriptions})"
+        }
+       }</code>
+       
+     * Click the "TEST" button and ensure that it runs successfully. The Github API returns a 404 instead of an authorization error if the token is not correctly set. If you see a 404, it may be that the URL is incorrect, or it may be that the access token is not configured correctly.
+
+     * Click the "CREATE" button.
+
+2. Verify that the contract_requiring_verification_published verification build for the provider is running correctly
+
+* In Github:
+     * Open the Github Actions page for the "contract_requiring_verification_published" workflow
+     * Click Actions -> Under Workflows, select contract_requiring_verification_published
+     * Select the latest execution
+     * This was triggered by pressing the TEST button in our webhook. In our CI/CD workflow, this will be triggered when a real Contract published that requires verification event takes place
+
+👉 Each of the above steps can be automated in PactFlow via the PactFlow API - you can see the targets for the commands in the provider's Makefile.
+
+Expected state by the end of this step
+Both consumer and provider builds passing ✅
+A webhook that has been tested and shown to trigger a pact verification build of the provider.
