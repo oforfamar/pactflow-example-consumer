@@ -97,4 +97,17 @@ The source repositories are configured to use the the public broker at test.pact
 * In Github:
      * Select the most recent build, this will have been triggered when you committed the changes in the last page
 
-*This build should now successfully publish the pact, but it will fail on the can-i-deploy step before it tries to deploy. This is because the provider has not published a successful verification result for the pact.*
+*After you have pushed your changes to the workflow files, the provider pipeline will run, fetching and verifying the configured pacts from your PactFlow account, and publishing the results back. The can-i-deploy command will pass, and allow the provider to be deployed.*
+
+
+## Back to the consumer
+To make both your builds go green, we are going to retry can-i-deploy, now that the consumer is deployed to production.
+
+1. Find the latest failing **example-consumer** workflow in the Github Actions page (**Actions** -> Under **Workflows**, select **Build** -> **failing build**).
+2. In the top right on of the failing job page, select to Re-run the failed jobs (can-i-deploy) (**Actions** -> Under **Re-run jobs**, select **Re-run failed jobs**).
+3. The test run should be pre-passing
+4. The **can-i-deploy** step should now pass - our consumer is safe to deploy, now that our provider published a verification result, and is deployed to production
+5. If you click on the step you should see a successful verification result, and **Computer says yes \o/**
+6. The **deploy** step should pass too - our consumer is deployed to production, and we record this with the **record-deployment command**, marking this application version of our consumer as deployed to **production**
+
+*Both consumer and provider builds passing*
