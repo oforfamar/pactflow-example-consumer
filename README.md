@@ -30,3 +30,71 @@ In Github:
 
 *The build will fail with an authentication error when it tries to publish the pact - that's expected. We need to update the configuration to point it at your new PactFlow account.*
 
+## Configure consumer pipeline
+
+The source repositories are configured to use the the public broker at test.pactflow.io. You will need to update the credentials to point to your own PactFlow account. To do this, we need to update the **PACT_BROKER_BASE_URL** environment variable in the Github workflow file, and create a Github Secret to store the PactFlow API token in.
+
+1. Create a Github Secret to store your PactFlow API token in.
+* In PactFlow:
+     * Log in to your PactFlow account (**https://<your-subdomain>.pactflow.io**), and go to Settings > API Tokens.
+     * Click the Copy button for the read/write CI token (make sure it's the read write one, not the read only one).
+* In Github:
+     * Open your forked **example-consumer** project (**https://github.com/<your-username>/example-consumer**)
+     * Click on the **Settings** tab.
+     * Open the **Secrets and variables** dropdown in the side menu.
+     * Select Actions from the dropdown
+     * Click the **New repository secret** button
+     * Set the name of the secret to **PACTFLOW_TOKEN_FOR_CI_CD_WORKSHOP**
+     * Paste in the PactFlow API token value you copied in the previous step.
+2. Update your workflow files in GitHub to point at your PactFlow Broker
+* In PactFlow:
+     * Go to Settings > API Tokens.
+     * Click the **COPY PACTFLOW BASE URL** button
+* In Github:
+     * Open your forked **example-consumer** project (**https://github.com/<your-username>/example-consumer**)
+     * Open **.github/workflows/build.yml**
+     * In the upper right corner of the file view, click 🖊️ to open the file editor.
+     * Update the value of **PACT_BROKER_BASE_URL** to the base URL of your own PactFlow account. You can easily get this by clicking the COPY PACTFLOW BASE URL button on the API Tokens page in PactFlow.
+     * Press the green **Commit changes** button
+3. View the build:
+* In Github:
+     * Select the most recent build, this will have been triggered when you committed the changes in the last page
+
+*This build should now successfully publish the pact, but it will fail on the can-i-deploy step before it tries to deploy. This is because the provider has not published a successful verification result for the pact.*
+
+
+## Configure provider pipeline
+
+The source repositories are configured to use the the public broker at test.pactflow.io. You will need to update the credentials to point to your own PactFlow account. To do this, we need to update the **PACT_BROKER_BASE_URL** environment variable in the Github workflow file, and create a Github Secret to store the PactFlow API token in.
+
+1. Create a Github Secret to store your PactFlow API token in.
+* In PactFlow:
+     * Log in to your PactFlow account (**https://<your-subdomain>.pactflow.io**), and go to Settings > API Tokens.
+     * Click the Copy button for the read/write CI token (make sure it's the read write one, not the read only one).
+* In Github:
+     * Open your forked **example-provider** project (**https://github.com/<your-username>/example-provider**)
+     * Click on the **Settings** tab.
+     * Open the **Secrets and variables** dropdown in the side menu.
+     * Select Actions from the dropdown
+     * Click the **New repository secret** button
+     * Set the name of the secret to **PACTFLOW_TOKEN_FOR_CI_CD_WORKSHOP**
+     * Paste in the PactFlow API token value you copied in the previous step.
+2. Update your workflow files in GitHub to point at your PactFlow Broker
+* In PactFlow:
+     * Go to Settings > API Tokens.
+     * Click the **COPY PACTFLOW BASE URL** button
+* In Github:
+     * Open your forked **example-provider** project (**https://github.com/<your-username>/example-provider**)
+     * Open **.github/workflows/build.yml**
+     * In the upper right corner of the file view, click 🖊️ to open the file editor.
+     * Update the value of **PACT_BROKER_BASE_URL** to the base URL of your own PactFlow account. You can easily get this by clicking the COPY PACTFLOW BASE URL button on the API Tokens page in PactFlow.
+     * Press the green **Commit changes** button
+     * Open **.github/workflows/contract_requiring_verification_published.yml**
+     * In the upper right corner of the file view, click 🖊️ to open the file editor.
+     * Update the value of **PACT_BROKER_BASE_URL** to the base URL of your own PactFlow account. You can easily get this by clicking the COPY PACTFLOW BASE URL button on the API Tokens page in PactFlow.
+     * Press the green **Commit changes** button
+3. View the build:
+* In Github:
+     * Select the most recent build, this will have been triggered when you committed the changes in the last page
+
+*This build should now successfully publish the pact, but it will fail on the can-i-deploy step before it tries to deploy. This is because the provider has not published a successful verification result for the pact.*
