@@ -169,7 +169,7 @@ The PactFlow webhook will need a Github access token to be able to trigger the b
      * Consumer: leave as "ALL"
      * Provider: select **pactflow-example-provider**
      * Events: select **Contract published that requires verification**
-     * URL:<code>https://api.github.com/repos/<YOUR GITHUB ACCOUNT HERE>/example-provider/dispatches</code>
+     * URL:<code>https://api.github.com/repos/your-username/example-provider/dispatches</code>
      * Headers:
      * <code>Content-Type: application/json
 Accept: application/vnd.github.everest-preview+json
