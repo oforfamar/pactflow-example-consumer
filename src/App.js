@@ -1,19 +1,20 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import 'spectre.css/dist/spectre.min.css';
-import 'spectre.css/dist/spectre-icons.min.css';
-import 'spectre.css/dist/spectre-exp.min.css';
-import Heading from './Heading';
-import Layout from './Layout';
-import API from './api';
-import PropTypes from 'prop-types';
+import React from "react";
+import { Link } from "react-router-dom";
+import "spectre.css/dist/spectre.min.css";
+import "spectre.css/dist/spectre-icons.min.css";
+import "spectre.css/dist/spectre-exp.min.css";
+import Heading from "./Heading";
+import Layout from "./Layout";
+import API from "./api";
+import PropTypes from "prop-types";
 
 const productPropTypes = {
   product: PropTypes.shape({
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired
-  }).isRequired
+    type: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 function ProductTableRow(props) {
@@ -21,14 +22,15 @@ function ProductTableRow(props) {
     <tr>
       <td>{props.product.name}</td>
       <td>{props.product.type}</td>
+      <td>{props.product.description}</td>
       <td>
         <Link
           className="btn btn-link"
           to={{
-            pathname: '/products/' + props.product.id,
+            pathname: "/products/" + props.product.id,
             state: {
-              product: props.product
-            }
+              product: props.product,
+            },
           }}
         >
           See more!
@@ -49,6 +51,7 @@ function ProductTable(props) {
         <tr>
           <th>Name</th>
           <th>Type</th>
+          <th>Description</th>
           <th />
         </tr>
       </thead>
@@ -58,7 +61,7 @@ function ProductTable(props) {
 }
 
 ProductTable.propTypes = {
-  products: PropTypes.arrayOf(productPropTypes.product)
+  products: PropTypes.arrayOf(productPropTypes.product),
 };
 
 class App extends React.Component {
@@ -67,9 +70,9 @@ class App extends React.Component {
 
     this.state = {
       loading: true,
-      searchText: '',
+      searchText: "",
       products: [],
-      visibleProducts: []
+      visibleProducts: [],
     };
     this.onSearchTextChange = this.onSearchTextChange.bind(this);
   }
@@ -79,7 +82,7 @@ class App extends React.Component {
       .then((r) => {
         this.setState({
           loading: false,
-          products: r
+          products: r,
         });
         this.determineVisibleProducts();
       })
@@ -100,21 +103,21 @@ class App extends React.Component {
     };
     this.setState((s) => {
       return {
-        visibleProducts: s.searchText ? findProducts(s.searchText) : s.products
+        visibleProducts: s.searchText ? findProducts(s.searchText) : s.products,
       };
     });
   }
 
   onSearchTextChange(e) {
     this.setState({
-      searchText: e.target.value
+      searchText: e.target.value,
     });
     this.determineVisibleProducts();
   }
 
   render() {
     if (this.state.error) {
-      throw Error('unable to fetch product data');
+      throw Error("unable to fetch product data");
     }
 
     return (
@@ -144,8 +147,8 @@ class App extends React.Component {
 
 App.propTypes = {
   history: PropTypes.shape({
-    push: PropTypes.func.isRequired
-  }).isRequired
+    push: PropTypes.func.isRequired,
+  }).isRequired,
 };
 
 export default App;
