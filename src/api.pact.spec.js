@@ -21,6 +21,7 @@ describe("API Pact test", () => {
         type: "CREDIT_CARD",
         name: "28 Degrees",
         description: "123",
+        price: 30.0,
       };
 
       // Uncomment to see this fail
