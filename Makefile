@@ -73,7 +73,7 @@ can_i_deploy: .env
 	  --pacticipant ${PACTICIPANT} \
 	  --version ${GIT_COMMIT} \
 	  --to-environment ${ENVIRONMENT} \
-	  --retry-while-unknown 30 \
+	  --retry-while-unknown 6 \
 	  --retry-interval 10
 
 deploy_app:
